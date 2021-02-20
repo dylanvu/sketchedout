@@ -8,3 +8,5 @@ function generateroomid(length) {
 }
 
 console.log(generateroomid(6))
+
+export default generateroomid

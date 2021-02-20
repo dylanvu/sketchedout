@@ -1,7 +1,7 @@
 import './App.css';
 import CanvasDraw from "react-canvas-draw";
 import socketClient from 'socket.io-client';
-import './generateroomID';
+//import generateroomid from './generateroomID';
 
 // This should be the url of the server
 const ENDPOINT = "http://localhost:2000"
@@ -13,8 +13,8 @@ function App() {
   let socket = socketClient(ENDPOINT);
 
   let roomInfo = {
-    roomID = "myRoomID",
-    currentBoard = "myCurrentboard"
+    roomID: "myRoomID",
+    currentBoard: "myCurrentboard"
   }
 
   socket.on('connection', () => {
@@ -32,7 +32,7 @@ function App() {
   })
 
   socket.on('uponJoiningload', () => {
-    sendBoard(currentBoard);
+    sendBoard(roomInfo.currentBoard);
   })
 
   socket.on('newBoard', (newBoard) => {
