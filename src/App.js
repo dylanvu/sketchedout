@@ -1,27 +1,49 @@
-import logo from './logo.svg';
 import './App.css';
-import io from 'socket.io-client'
+import CanvasDraw from "react-canvas-draw";
+
 
 function App() {
-
-  // var socket = io();
-  // var form 
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div class="area-1">
+      <h1>SketchedOut</h1>
+      <br>
+      </br>
+            <div class="question">
+            <label>Enter the Room Code: </label>
+            <input type="text" name="name">
+            </input>
+            <br>
+            </br>
+            <input type="submit" name="submit" value="Join Room">
+            </input>
+            <label></label>
+            </div>
+              <br>
+              </br>
+              <button onClick={() => {
+              this.saveableCanvas.undo();
+              }}>
+              Undo
+              </button>
+              <button>
+              Brush Size
+              </button>
+              <button>
+              Color
+              </button>
+      <body1>
+
+            <CanvasDraw 
+      canvasWidth= "1700px"
+      canvasHeight= "700px"/>
+      </body1>
+
+      </div>
   );
-}
+  }
+
+ 
+
+
 
 export default App;
