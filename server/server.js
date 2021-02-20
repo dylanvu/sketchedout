@@ -19,8 +19,16 @@ let board = "Board Test";
 
 io.on('connection', (socket) => {
     console.log("A user has connected! Their socket ID is: " + socket.id);
+
     socket.emit('connection', null)
 
+    socket.on('boardDebug', () => {
+        console.log('Received message from canvas for socket ' + socket.id)
+        //var srvSockets = io.of('/').sockets
+        //console.log(srvSockets)
+        socket.emit('boardResponse', 'Board was clicked')
+        console.log('Response was sent to socket ' + socket.id)
+    })
     // Function to create a room upon create request
     socket.on('createRequest', () => {
         var roomID = generateRoomID(6)
@@ -60,7 +68,7 @@ io.on('connection', (socket) => {
     )
 
     socket.on('disconnect', () => {
-        console.log('user disconnected');
+        console.log('Socket ' + socket.id + ' disconnected');
         socket.removeAllListeners();
     });
 });
