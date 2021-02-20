@@ -5,7 +5,7 @@ import socketClient from 'socket.io-client'
 const ENDPOINT = "http://localhost:2000"
 
 function App() {
-  
+  // Keep everything below this
   let socket = socketClient(ENDPOINT);
   socket.on('connection', () => {
     console.log("I'm in the mainframe.")
@@ -21,13 +21,16 @@ function App() {
     console.log("Test")
     socket.emit('joinRequest', "ROOMCODEHERE")
   }
+  // Keep everything above this
 
   return (
     <div className="App">
       <header className="App-header">
+        {/* Keep this button below */}
         <button onClick={joinRoom}>
           Join a room
         </button>
+        {/* Keep this button above */}
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload!
