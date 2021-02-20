@@ -18,7 +18,7 @@ let roomIDlist = [];
 let board = "Board Test";
 
 io.on('connection', (socket) => {
-    console.log("A user has connected!");
+    console.log("A user has connected! Their socket ID is: " + socket.id);
     socket.emit('connection', null)
 
     // Function to create a room upon create request
@@ -58,4 +58,9 @@ io.on('connection', (socket) => {
         socket.to(roomInfo.roomID).emit('newboard', roomInfo.board)
         }
     )
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+        socket.removeAllListeners();
+    });
 });

@@ -1,16 +1,15 @@
 import './App.css';
 import CanvasDraw from "react-canvas-draw";
-import socketClient from 'socket.io-client';
+import {io} from 'socket.io-client';
 //import generateroomid from './generateroomID';
 
 // This should be the url of the server
 const ENDPOINT = "http://localhost:2000"
+const socket = io(ENDPOINT);
 
 function App() {
   // Keep everything below this
   let roomIDtoJoin = "JoinROOM" // This is a template value. Later on, use a form to change this input
-
-  let socket = socketClient(ENDPOINT);
 
   let roomInfo = {
     roomID: "myRoomID",
