@@ -1,18 +1,22 @@
 import logo from './logo.svg';
 import './App.css';
-import io from 'socket.io-client'
+import socketClient from 'socket.io-client'
+
+const ENDPOINT = "http://localhost:2000"
 
 function App() {
 
-  // var socket = io();
-  // var form 
+  let socket = socketClient(ENDPOINT);
+  socket.on('connection', () => {
+    console.log("I'm in the mainframe.")
+  })
 
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Edit <code>src/App.js</code> and save to reload!
         </p>
         <a
           className="App-link"
