@@ -4,8 +4,8 @@ import io from 'socket.io-client'
 
 function App() {
 
-  var socket = io();
-  var form 
+  // var socket = io();
+  // var form 
 
   return (
     <div className="App">
