@@ -32,7 +32,7 @@ function App() {
       if (!socket) {
         socket = io(ENDPOINT)
       }
-
+      console.log(socket)
       socket.on('connection', () => {
       console.log("I'm in the mainframe.");
     })
@@ -66,7 +66,7 @@ function App() {
       socket.emit('debugMessage')
     })
 
-  },[])
+  })
 
 
     // Create room
@@ -76,7 +76,8 @@ function App() {
   }
 
     // When the client requests to join a room, send a "joinRequest" with the contents of roomID to the server
-  function joinRoom(event, roomID) {
+  function joinRoom(e) {
+    e.preventDefault()
     console.log("join room button pressed")
     console.log(roomID);
     console.log(socket);
@@ -117,7 +118,7 @@ function App() {
             <br>
             </br>
             <p>{roomID}</p>
-            <button className="joinRoom" onClick={(e) => {joinRoom(e, roomID)}}> Join Room
+            <button className="joinRoom" onClick={(e) => {joinRoom(e)}}> Join Room
             </button>
             <label></label>
             <button className="createRoom" onClick={createRoom}> Create Room
