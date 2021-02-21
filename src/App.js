@@ -24,6 +24,8 @@ function App() {
     roomID: "Room not joined",
     currentBoard: "No board yet"
   }
+  let [currentBrushRadius, setCurrentBrushradius] = useState(12)
+  let [currentBrushColor, setCurrentBrushColor] = useState()
 
   useEffect(() => {
     // All the socket events should be in the useEffect to prevent duplicate receiving of events from server? According to the mentor
@@ -86,50 +88,79 @@ function App() {
     console.log("Sending data")
     socket.emit('updateBoard', roomInfo);
   }
-  
-    return (
-      <div class="area-1">
-        <h1>SketchedOut</h1>
-        <br>
-        </br>
-              <div class="question">
-              <label>Enter the Room Code: </label>
-              <input type="text" name="name">
-              </input>
+
+  return (
+    
+    <div class="area-1">
+      <h1>SketchedOut</h1>
+      <br>
+      </br>
+      <div className="flex-container">
+      <section className="flex1">
+            <div className="question">
+              <div className="roomID">
+              <label>
+                Current Room Code:
+              </label>
+              </div>
               <br>
               </br>
-              <input type="submit" name="submit" value="Join Room" onClick={joinRoom}>
-              </input>
-              <label></label>
-              <button onClick={createRoom}>
-              Create a room
-              </button>
+              <div className="roomCode">
+              <label>
+              Enter the Room Code: 
+              </label>
               </div>
-                <br>
-                </br>
-                <button onClick={() => {
+            <input type="text" name="name">
+            </input>
+            <br>
+            </br>
+            <button className="joinRoom" onClick={joinRoom}> Join Room
+            </button>
+            <label></label>
+            <button className="createRoom" onClick={createRoom}> Create Room
+            </button>
+            </div>
+      </section>
+      <div className="flex2">
+          <div className="canvasButtons">
+              <p className="currentBrushNumber">
+                <label>Current Brush Number: </label>{currentBrushRadius}
+              </p>
+              <button className="undo" onClick={() => {
                   saveableCanvas.current.undo();
                   let saveData = saveableCanvas.current.getSaveData()
                   sendBoard(saveData)
                 }}>
                 Undo
                 </button>
-                <button>
-                Brush Size
-                </button>
-                <button>
-                Color
-                </button>
-                <button onClick={() => {
+              <button className="increaseBrushRadius" onClick={() =>{
+                
+                setCurrentBrushradius(currentBrushRadius+1)
+                
+              }}>
+              Increase Brush Size
+              </button>
+              <button className="decreaseBrushRadius" onClick={() => {
+                setCurrentBrushradius(currentBrushRadius-1)
+              }}>
+              Decrease Brush Size 
+              </button>
+              <button className="color">
+              Color
+              </button>
+              <button onClick={() => {
                   saveableCanvas.current.clear();
                   let saveData = saveableCanvas.current.getSaveData()
                   sendBoard(saveData)
                 }}>
                 Clear Board
-                </button>
-        <body1>
-          {/* Keep this div here so that we can stick an on event on the canvas */}
-        <div onMouseUp={() => {
+              </button>
+          </div>
+      </div>
+    </div>
+      <body1>
+
+      <div onMouseUp={() => {
           let saveData = saveableCanvas.current.getSaveData()
           sendBoard(saveData)
         }}>
@@ -137,11 +168,14 @@ function App() {
           ref={saveableCanvas}
           canvasWidth= "1700px"
           canvasHeight= "700px"
+          brushRadius= {currentBrushRadius}
           />
         </div>
-        </body1>
-        </div>
-    )
-}
+      </body1>
+      
+      </div>
+  );
+  }
+
 
 export default App;
