@@ -8,12 +8,13 @@ const io = require('socket.io')(http, {
     // Origin should be where the request is coming from
     // http://localhost:3000/
     cors: {
-        origin: "http://localhost:3000/",
+        origin: "http://localhost:3000",
         methods: ["GET", "POST"]
     }
 });
 
 const PORT = 2000;
+//const PORT = process.env.PORT || 2000;
 http.listen(PORT, () => console.log('The server is running'));
 
 let roomIDlist = [];
