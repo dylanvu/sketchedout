@@ -47,15 +47,16 @@ io.on('connection', (socket) => {
         var rooms = io.sockets.adapter.rooms;
         if (rooms.has(joinRoomID) == true) {
             socket.join(joinRoomID);
-            socket.to(joinRoomID).emit('uponJoiningload', null)
+            console.log("Room successfully joined");
+            socket.to(joinRoomID).emit('uponJoiningload', null);
+            socket.emit('newRoomID', joinRoomID);
         }
         // If the room does not exist, send an error message to the client
         else {
             socket.emit('joinError', null)
-        }
+            console.log("Room requested not found")
             // I wonder if there's an issue with this below. Maybe we should only send to a host or something?
-            // TODO: change this to "sendBoard" or something 
-            // You don't need to call a socket.on to update the board here because when you emit the 'uponJoiningload', on the client side it should trigger a room-wide update function
+            // TODO: change this to "sendBoard" or something // You don't need to call a socket.on to update the board here because when you emit the 'uponJoiningload', on the client side it should trigger a room-wide update function
             // which will encompass this newly joined socket anyways.
     })
 
