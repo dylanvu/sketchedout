@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import CanvasDraw from "react-canvas-draw";
 import { io } from 'socket.io-client';
 import { compress, decompress } from 'lz-string'
+import { ChromePicker } from 'react-color'
 //import generateroomid from './generateroomID';
 
 // socket MUST be defined outside here as upon calling a useState, it creates a new client.
@@ -19,7 +20,7 @@ function App() {
   // 
 
   let [currentBrushRadius, setCurrentBrushradius] = useState(12)
-  let [currentBrushColor, setCurrentBrushColor] = useState()
+  let [currentBrushColor, setCurrentbrushColor] = useState("#17202A")
   let [roomID, setroomID] = useState('No room')
   let [currentBoard, setCurrentboard] = useState('No board yet')
 
@@ -107,7 +108,7 @@ function App() {
   }
 
   return (
-    <div class="area-1">
+    <div className="area-1">
       <h1>SketchedOut</h1>
       <br>
       </br>
@@ -150,9 +151,7 @@ function App() {
                 Undo
                 </button>
               <button className="increaseBrushRadius" onClick={() =>{
-                
                 setCurrentBrushradius(currentBrushRadius+1)
-                
               }}>
               Increase Brush Size
               </button>
@@ -163,10 +162,7 @@ function App() {
               }}>
               Decrease Brush Size 
               </button>
-              <button className="color">
-              Color
-              </button>
-              <button onClick={() => {
+              <button className="clearBoard" onClick={() => {
                   saveableCanvas.current.clear();
                   let saveData = saveableCanvas.current.getSaveData()
                   setCurrentboard(saveData)
@@ -174,11 +170,39 @@ function App() {
                 }}>
                 Clear Board
               </button>
+              <button className="colorRed" onClick={() => {
+              setCurrentbrushColor("#ff0000")
+              }}>
+              Red
+              </button>
+              <button className="colorOrange" onClick={() => {
+              setCurrentbrushColor("#ff7b00")
+              }}>
+              Orange
+              </button>
+              <button className="colorYellow" onClick={() => {
+              setCurrentbrushColor("#FFFF00")
+              }}>
+              Yellow
+              </button>
+              <button className="colorGreen" onClick={() => {
+              setCurrentbrushColor("#008000")
+              }}>
+              Green
+              </button>
+              <button className="colorBlue" onClick={() => {
+              setCurrentbrushColor("#0000FF")
+              }}>
+              Blue
+              </button>
+              <button className="colorPurple" onClick={() => {
+              setCurrentbrushColor("#800080")
+              }}>
+              Purple
+              </button>
           </div>
       </div>
     </div>
-      <body1>
-
       <div onMouseUp={() => {
           let saveData = saveableCanvas.current.getSaveData()
           sendBoard(saveData)
@@ -188,11 +212,10 @@ function App() {
           canvasWidth= "1700px"
           canvasHeight= "700px"
           brushRadius= {currentBrushRadius}
+          brushColor= {currentBrushColor}
           />
         </div>
-      </body1>
       </div>
-
   );
   }
 export default App;

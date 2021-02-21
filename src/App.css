@@ -8,11 +8,12 @@ html {background-image:url(images/bluelight.jpg)}
     font-size:50px;
     text-align:center;
     border: 3px solid white;
+    width:80%;
     padding-bottom: 10px;
     padding-top: 10px;
     margin-top:20px;
-    margin-right:300px;
-    margin-left:300px;
+    margin-right:auto;
+    margin-left:auto;
     /*background-image:url('images/bluelight.jpg');*/
 }
 
@@ -53,7 +54,7 @@ margin:0px;
     color: white;
     }
     .area-1 .undo:hover{
-    background-color:orange;
+    background-color:rgb(223, 190, 43);
      color:white;
     }
 
@@ -64,7 +65,7 @@ margin:0px;
     color: white; 
     }
     .area-1 .increaseBrushRadius:hover{
-    background-color:orange;
+    background-color:rgb(223, 190, 43);
     color:white;
     }
 
@@ -75,7 +76,7 @@ margin:0px;
     color: white;
     }
     .area-1 .decreaseBrushRadius:hover{
-    background-color:orange;
+    background-color:rgb(223, 190, 43);
     color:white;
     }
 .area-1 .currentBrushNumber{
@@ -83,16 +84,86 @@ color:white;
 font-style:bold;
 }
 
-.area-1 .color{
+.area-1 .clearBoard{
+    margin-right:70px;
     padding: 8px 15px;
     font-family: Courier;
     background-color: grey;
     color: white;
     }
-    .area-1 .color:hover{
-    background-color:orange;
+    .area-1 .clearBoard:hover{
+    background-color:rgb(223, 190, 43);
     color:white;
     }
+
+.area-1 .colorRed{
+    margin-left:128px;
+    padding:5px 10px;
+    font-family:Courier;
+    background-color:lightcoral;
+    color: black;
+    }
+    .area-1 .colorRed:hover{
+    background-color:red;
+    color:white;
+    }
+.area-1 .colorOrange{
+    padding:5px 10px;
+    font-family:Courier;
+    background-color:lightsalmon;
+    color: black;
+    }
+    .area-1 .colorOrange:hover{
+    background-color:rgb(255, 123, 0);
+    color:white;
+    }
+
+.area-1 .colorYellow{
+    padding:5px 10px;
+    font-family:Courier;
+    background-color:lightgoldenrodyellow;
+    color: black;
+    }
+    .area-1 .colorYellow:hover{
+    background-color:yellow;
+    color:black;
+    }
+
+.area-1 .colorGreen{
+    padding:5px 10px;
+    font-family:Courier;
+    background-color:lightgreen;
+    color: black;
+    }
+    .area-1 .colorGreen:hover{
+    background-color:green;
+    color:white;
+    }
+
+.area-1 .colorBlue{
+    padding:5px 10px;
+    font-family:Courier;
+    background-color:lightblue;
+    color: black;
+    }
+    .area-1 .colorBlue:hover{
+    background-color:blue;
+    color:white;
+    }
+
+.area-1 .colorPurple{
+    margin-right:100px;
+    padding:5px 10px;
+    font-family:Courier;
+    background-color:orchid;
+    color: black;
+    }
+    .area-1 .colorPurple:hover{
+    background-color:purple;
+    color:white;
+    }
+
+
     @media screen and (min-width: 640px){
         .flex-container{
             display: flex;
@@ -106,3 +177,4 @@ font-style:bold;
     .flex1{
         flex: 0 1 300px;
     }
+
