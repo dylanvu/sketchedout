@@ -11,7 +11,8 @@ let socket = null
 
 function App() {
   // This should be the url of the server
-  const ENDPOINT = "http://localhost:2000"
+  //const ENDPOINT = "http://localhost:2000"
+  const ENDPOINT = "https://sketchedout-server.herokuapp.com"
   const saveableCanvas = useRef()
 
     // This is to initialize socket
