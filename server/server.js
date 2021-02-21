@@ -33,7 +33,7 @@ io.on('connection', (socket) => {
     // Function to create a room upon create request
     socket.on('createRequest', () => {
         var roomID = generateroomid(6)
-        console.log("Socket " + socket.id + " created room " + String(roomID))
+        console.log("Socket " + socket.id + " created room " + roomID)
         roomID = "FLXJYZ" // for debugging create room
         roomIDlist.push(roomID);
         socket.join(roomID);
@@ -70,17 +70,23 @@ io.on('connection', (socket) => {
         }
     )
 
-    socket.on('disconnect', () => {
-        console.log('Socket ' + socket.id + ' disconnected');
-        socket.removeAllListeners();
-    });
+    socket.on('disconnect', (roomID) => {
+        var room = socket.adapter.rooms[roomID];
+        const index = roomIDlist.indexOf(roomID)
+        if (room.length = 0) {
+            if (index > -1) {
+                roomIDlist.splice(index, 1)
+            }
+        }
+        console.log('Socket ' + socket.id + ' disconnected'); 
+    })
 });
 
 function generateroomid(length) {
     var char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    var roomid = '';
+    var roomID = '';
     for (var i = 0; i < length; i++) {
-        roomid += char.charAt(Math.floor(Math.random() * char.length));
+        roomID += char.charAt(Math.floor(Math.random() * char.length));
     }
-    return roomid;
+    return roomID;
 }

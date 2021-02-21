@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CanvasDraw from "react-canvas-draw";
 import { io } from 'socket.io-client';
 import { compress, decompress } from 'lz-string'
