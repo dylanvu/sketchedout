@@ -24,6 +24,10 @@ function App() {
     roomID: "Room not joined",
     currentBoard: "No board yet"
   }
+
+  // Issue: when we increase the brush size on a client, it emits null and the client crashes.
+  // 
+
   let [currentBrushRadius, setCurrentBrushradius] = useState(12)
   let [currentBrushColor, setCurrentBrushColor] = useState()
 
@@ -48,7 +52,7 @@ function App() {
       // This should load the board (see canvas demo)
       var updatedBoard = decompress(saveData);
       console.log("Attempting to load board")
-      saveableCanvas.current.loadSaveData(updatedBoard);
+      saveableCanvas.current.loadSaveData(updatedBoard, true);
     })
 
       // If the roomID does not exist
