@@ -22,13 +22,14 @@ io.on('connection', (socket) => {
 
     socket.emit('connection', null)
 
-    socket.on('boardDebug', () => {
-        console.log('Received message from canvas for socket ' + socket.id)
-        //var srvSockets = io.of('/').sockets
-        //console.log(srvSockets)
-        socket.emit('boardResponse', 'Board was clicked')
-        console.log('Response was sent to socket ' + socket.id)
-    })
+    // socket.on('boardDebug', () => {
+    //     console.log('Received message from canvas for socket ' + socket.id)
+    //     //var srvSockets = io.of('/').sockets
+    //     //console.log(srvSockets)
+    //     socket.emit('boardResponse', 'Board was clicked')
+    //     console.log('Response was sent to socket ' + socket.id)
+    // })
+    
     // Function to create a room upon create request
     socket.on('createRequest', () => {
         var roomID = generateroomid(6)

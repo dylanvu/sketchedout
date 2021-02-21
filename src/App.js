@@ -1,5 +1,5 @@
 import './App.css';
-import React, {useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import CanvasDraw from "react-canvas-draw";
 import { io } from 'socket.io-client';
 import { compress, decompress } from 'lz-string'
@@ -37,9 +37,9 @@ function App() {
       console.log("I'm in the mainframe.");
     })
 
-    socket.on('boardResponse', () => {
-      console.log("Obtained board info back")
-    })
+    // socket.on('boardResponse', () => {
+    //   console.log("Obtained board info back")
+    // })
 
     // When the client receives the call to load the board, load the board in CanvasDraw
     socket.on('loadBoard', (saveData) => {
@@ -108,7 +108,9 @@ function App() {
                 <br>
                 </br>
                 <button onClick={() => {
-                saveableCanvas.current.undo();
+                  saveableCanvas.current.undo();
+                  let saveData = saveableCanvas.current.getSaveData()
+                  sendBoard(saveData)
                 }}>
                 Undo
                 </button>
@@ -120,6 +122,8 @@ function App() {
                 </button>
                 <button onClick={() => {
                   saveableCanvas.current.clear();
+                  let saveData = saveableCanvas.current.getSaveData()
+                  sendBoard(saveData)
                 }}>
                 Clear Board
                 </button>
