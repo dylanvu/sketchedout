@@ -42,7 +42,10 @@ function App() {
     // When the client receives the call to load the board, load the board in CanvasDraw
     socket.on('loadBoard', (saveData) => {
       // This should load the board (see canvas demo)
+      console.log(saveData)
       var updatedBoard = decompress(saveData);
+      // var updatedBoard = saveData;
+      // console.log(saveData)
       console.log("Attempting to load board")
       saveableCanvas.current.loadSaveData(updatedBoard, true);
     })
@@ -55,6 +58,7 @@ function App() {
       // When someone joins a room, they will request a current copy of the board. Send that room info to the server
     socket.on('uponJoiningload', () => {
       sendBoard(currentBoard);
+      console.log("The person is drawing")
     })
 
     socket.on('newRoomID', (roomID) => {
@@ -91,6 +95,8 @@ function App() {
   function sendBoard(saveData) {
     // Compress the board info
     var compressedData = compress(saveData);
+    // var compressedData = saveData;
+    console.log(compressedData)
     let roomInfo = {
       roomID: roomID,
       currentBoard: compressedData

@@ -41,14 +41,14 @@ io.on('connection', (socket) => {
     
     // Function to join a room upon join request
     socket.on('joinRequest', (joinRoomID) => {
-        console.log(joinRoomID)
         // Check to see if the joinroomID exists inside rooms (ES6 map)
         var rooms = io.sockets.adapter.rooms;
         if (rooms.has(joinRoomID) == true) {
-            socket.join(joinRoomID);
-            console.log("Room successfully joined");
             var iterator = rooms.get(joinRoomID).values();
-            var first = iterator.next().value();
+            var first = iterator.next().value;
+            console.log("The person joining the room is: " + socket.id)
+            console.log("The person already in the room is: " + first);
+            socket.join(joinRoomID);
             socket.to(first).emit('uponJoiningload', null);
             socket.emit('newRoomID', joinRoomID);
         }
@@ -63,6 +63,7 @@ io.on('connection', (socket) => {
 
     socket.on('updateBoard', (roomInfo) => {
         console.log(socket.id + " has drawn on the board!")
+        console.log(roomInfo.currentBoard)
         socket.to(roomInfo.roomID).emit('loadBoard', roomInfo.currentBoard)
         }
     )
