@@ -6,8 +6,9 @@ const http = require('http').createServer(app);
 // Since you are accessing the server from different ports, you have to go through CORS. See: https://socket.io/docs/v3/handling-cors/
 const io = require('socket.io')(http, {
     // Origin should be where the request is coming from
+    // http://localhost:3000/
     cors: {
-        origin: "https://salty-hollows-06080.herokuapp.com/",
+        origin: "http://localhost:3000/",
         methods: ["GET", "POST"]
     }
 });
