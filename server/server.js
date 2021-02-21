@@ -1,3 +1,4 @@
+const { strict } = require('assert');
 const app = require('express');
 
 const http = require('http').createServer(app);
@@ -15,18 +16,27 @@ const PORT = 2000;
 http.listen(PORT, () => console.log('The server is running'));
 
 let roomIDlist = [];
-let board = "Board Test";
 
 io.on('connection', (socket) => {
-    console.log("A user has connected!");
+    console.log("A user has connected! Their socket ID is: " + socket.id);
+
     socket.emit('connection', null)
 
+    socket.on('boardDebug', () => {
+        console.log('Received message from canvas for socket ' + socket.id)
+        //var srvSockets = io.of('/').sockets
+        //console.log(srvSockets)
+        socket.emit('boardResponse', 'Board was clicked')
+        console.log('Response was sent to socket ' + socket.id)
+    })
     // Function to create a room upon create request
     socket.on('createRequest', () => {
-        var roomID = generateRoomID(6)
+        var roomID = generateroomid(6)
+        console.log("Socket " + socket.id + " created room " + String(roomID))
+        roomID = "FLXJYZ" // for debugging create room
         roomIDlist.push(roomID);
         socket.join(roomID);
-        socket.emit('New Game Created', board);
+        socket.emit('newRoomID', roomID); // We don't have to emit a new board back
     })
     
     // Function to join a room upon join request
@@ -55,7 +65,21 @@ io.on('connection', (socket) => {
     })
 
     socket.on('updateBoard', (roomInfo) => {
-        socket.to(roomInfo.roomID).emit('newboard', roomInfo.board)
+        socket.to(roomInfo.roomID).emit('loadBoard', roomInfo.currentBoard)
         }
     )
+
+    socket.on('disconnect', () => {
+        console.log('Socket ' + socket.id + ' disconnected');
+        socket.removeAllListeners();
+    });
 });
+
+function generateroomid(length) {
+    var char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var roomid = '';
+    for (var i = 0; i < length; i++) {
+        roomid += char.charAt(Math.floor(Math.random() * char.length));
+    }
+    return roomid;
+}
