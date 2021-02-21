@@ -5,11 +5,8 @@ import { io } from 'socket.io-client';
 import { compress, decompress } from 'lz-string'
 //import generateroomid from './generateroomID';
 
-// This should be the url of the server
-
-
 function App() {
-  
+  // This should be the url of the server
   const ENDPOINT = "http://localhost:2000"
   
   const saveableCanvas = useRef()
@@ -172,10 +169,8 @@ function App() {
           />
         </div>
       </body1>
-      
       </div>
+
   );
   }
-
-
 export default App;
