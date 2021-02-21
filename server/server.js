@@ -47,7 +47,9 @@ io.on('connection', (socket) => {
         if (rooms.has(joinRoomID) == true) {
             socket.join(joinRoomID);
             console.log("Room successfully joined");
-            socket.to(joinRoomID).emit('uponJoiningload', null);
+            var iterator = rooms.get(joinRoomID).values();
+            var first = iterator.next().value();
+            socket.to(first).emit('uponJoiningload', null);
             socket.emit('newRoomID', joinRoomID);
         }
         // If the room does not exist, send an error message to the client
@@ -66,13 +68,6 @@ io.on('connection', (socket) => {
     )
 
     socket.on('disconnect', () => {
-        // var room = socket.adapter.rooms[roomID];
-        // const index = roomIDlist.indexOf(roomID)
-        // if (room.length == 0) {
-        //     if (index > -1) {
-        //         roomIDlist.splice(index, 1)
-        //     }
-        // }
         var roomList = io.sockets.adapter.rooms
         console.log(roomList)
         console.log(typeof roomList)
