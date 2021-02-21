@@ -1,12 +1,23 @@
 import './App.css';
+import React, { Component } from "react";
 import CanvasDraw from "react-canvas-draw";
 import { io } from 'socket.io-client';
+import { compress, decompress } from 'lz-string'
 //import generateroomid from './generateroomID';
 
 // This should be the url of the server
 const ENDPOINT = "http://localhost:2000"
 const socket = io(ENDPOINT);
 
+// Client information
+let roomIDtoJoin = "JoinROOM" // This is a template value. Later on, use a form to change this input
+
+let roomInfo = {
+  roomID: "Room not joined",
+  currentBoard: "No board yet"
+}
+
+// ALL socket related functions should be outside of App() since for some reason, when an event is emitted to the client, it gets emitted multiple times
 // All the socket events and functions
   //On connection
 socket.on('connection', () => {
@@ -17,27 +28,33 @@ socket.on('boardResponse', () => {
   console.log("Obtained board info back")
 })
 
-function debugBoard() {
-  console.log('Canvas was mouse-upped')
-  socket.emit('boardDebug', null)
+function debugBoard(saveData) {
+  console.log('Canvas was mouse-upped');
+  socket.emit('boardDebug', null);
+  console.log(saveData);
+  var compressedData = compress(saveData);
+  console.log(compressedData);
 }
 
   // When the client receives the call to load the board, load the board in CanvasDraw
-socket.on('loadBoard', (board) => {
+socket.on('loadBoard', (saveData) => {
   // This should load the board (see canvas demo)
-  console.log(board);
+  var updatedBoard = decompress(saveData);
+  console.log(updatedBoard)
 })
 
+  // If the roomID does not exist
 socket.on('joinError', () => {
   console.log("Room not found! Make sure you have a valid room code.");
 })
 
+  // When someone joins a room, they will request a current copy of the board. Send that room info to the server
 socket.on('uponJoiningload', () => {
   sendBoard(roomInfo.currentBoard);
 })
 
-socket.on('newBoard', (newBoard) => {
-  console.log("newBoardhere")
+socket.on('newRoomID', (roomID) => {
+  roomInfo.roomID = roomID
 })
 
   // Create room
@@ -53,66 +70,70 @@ function joinRoom() {
 }
 
 // This function should save the current board
-function sendBoard(currentBoard) {
-  socket.emit('updateBoard', roomInfo)
+function sendBoard(saveData) {
+  // Compress the board info
+  var compressedData = compress(saveData);
+  roomInfo.currentBoard = compressedData;
+  console.log("Sending data")
+  socket.emit('updateBoard', roomInfo);
 }
 
-// Client information
-let roomIDtoJoin = "JoinROOM" // This is a template value. Later on, use a form to change this input
-
-let roomInfo = {
-  roomID: "myRoomID",
-  currentBoard: "myCurrentboard"
-}
-
-function App() {
-  return (
-    <div class="area-1">
-      <h1>SketchedOut</h1>
-      <br>
-      </br>
-            <div class="question">
-            <label>Enter the Room Code: </label>
-            <input type="text" name="name">
-            </input>
-            <br>
-            </br>
-            <input type="submit" name="submit" value="Join Room" onClick={joinRoom}>
-            </input>
-            <label></label>
-            <button onClick={createRoom}>
-            Create a room
-            </button>
-            </div>
+class App extends Component {
+  render() {
+    return (
+      <div class="area-1">
+        <h1>SketchedOut</h1>
+        <br>
+        </br>
+              <div class="question">
+              <label>Enter the Room Code: </label>
+              <input type="text" name="name">
+              </input>
               <br>
               </br>
-              <button onClick={() => {
-              this.saveableCanvas.undo();
-              }}>
-              Undo
+              <input type="submit" name="submit" value="Join Room" onClick={joinRoom}>
+              </input>
+              <label></label>
+              <button onClick={createRoom}>
+              Create a room
               </button>
-              <button>
-              Brush Size
-              </button>
-              <button>
-              Color
-              </button>
-      <body1>
-      
-      <div onMouseUp={debugBoard}>
-        <CanvasDraw 
-        canvasWidth= "1700px"
-        canvasHeight= "700px"
-        />
-      </div>
-      </body1>
-
-      </div>
-  );
-  }
-
- 
+              </div>
+                <br>
+                </br>
+                <button onClick={() => {
+                this.saveableCanvas.undo();
+                }}>
+                Undo
+                </button>
+                <button>
+                Brush Size
+                </button>
+                <button>
+                Color
+                </button>
+                <button onClick={() => {
+                  this.saveableCanvas.clear();
+                }}>
+                Clear Board
+                </button>
+        <body1>
+          {/* Keep this div here so that we can stick an on event on the canvas */}
+        <div onMouseUp={() => {
+          let saveData = this.saveableCanvas.getSaveData()
+          sendBoard(saveData)
+        }}>
+          <CanvasDraw 
+          ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
+          canvasWidth= "1700px"
+          canvasHeight= "700px"
+          />
+        </div>
+        </body1>
+        </div>
+    )}
+}
 
 
 
 export default App;
+

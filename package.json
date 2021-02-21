@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^12.7.1",
     "cors": "^2.8.5",
     "firebase": "^8.2.9",
+    "lz-string": "^1.4.4",
     "mongoose": "^5.11.17",
     "react": "^17.0.1",
     "react-canvas-draw": "^1.1.1",
