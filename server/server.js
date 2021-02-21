@@ -66,13 +66,6 @@ io.on('connection', (socket) => {
     )
 
     socket.on('disconnect', () => {
-        // var room = socket.adapter.rooms[roomID];
-        // const index = roomIDlist.indexOf(roomID)
-        // if (room.length == 0) {
-        //     if (index > -1) {
-        //         roomIDlist.splice(index, 1)
-        //     }
-        // }
         var roomList = io.sockets.adapter.rooms
         console.log(roomList)
         console.log(typeof roomList)
