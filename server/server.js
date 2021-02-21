@@ -58,7 +58,7 @@ io.on('connection', (socket) => {
             // I wonder if there's an issue with this below. Maybe we should only send to a host or something?
             // TODO: change this to "sendBoard" or something // You don't need to call a socket.on to update the board here because when you emit the 'uponJoiningload', on the client side it should trigger a room-wide update function
             // which will encompass this newly joined socket anyways.
-    })
+    }})
 
     socket.on('updateBoard', (roomInfo) => {
         socket.to(roomInfo.roomID).emit('loadBoard', roomInfo.currentBoard)
