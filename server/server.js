@@ -48,7 +48,9 @@ io.on('connection', (socket) => {
         if (rooms.has(joinRoomID) == true) {
             socket.join(joinRoomID);
             console.log("Room successfully joined");
-            socket.to(joinRoomID).emit('uponJoiningload', null);
+            var iterator = rooms.get(joinRoomID).values();
+            var first = iterator.next().value();
+            socket.to(first).emit('uponJoiningload', null);
             socket.emit('newRoomID', joinRoomID);
         }
         // If the room does not exist, send an error message to the client
