@@ -43,28 +43,20 @@ io.on('connection', (socket) => {
     // Function to join a room upon join request
     socket.on('joinRequest', (joinRoomID) => {
         console.log(joinRoomID)
-        
-        // Check to see if the room exists
-        var roomCheck = false;
-        // Must modify the roomcheck algorithim here to iterate through every single room obtained from io.sockets.adapter.rooms
-        // And check to see if joinRoomID is inside of this list thingy object
-        for (room = 0; room < roomIDlist.length; room++) {
-            if (joinRoomID == roomIDlist[room]) {
-                roomCheck = true
-                break
-            }
+        // Check to see if the joinroomID exists inside rooms (ES6 map)
+        var rooms = io.sockets.adapter.rooms;
+        if (rooms.has(joinRoomID) == true) {
+            socket.join(joinRoomID);
+            socket.to(joinRoomID).emit('uponJoiningload', null)
         }
         // If the room does not exist, send an error message to the client
-        if (roomCheck == false) {
+        else {
             socket.emit('joinError', null)
-        } else if (roomCheck == true) {    // If the room does exist, join the room and send the board
-            socket.join(joinRoomID);
-
+        }
             // I wonder if there's an issue with this below. Maybe we should only send to a host or something?
-            socket.to(joinRoomID).emit('uponJoiningload', null) // TODO: change this to "sendBoard" or something 
+            // TODO: change this to "sendBoard" or something 
             // You don't need to call a socket.on to update the board here because when you emit the 'uponJoiningload', on the client side it should trigger a room-wide update function
             // which will encompass this newly joined socket anyways.
-        }
     })
 
     socket.on('updateBoard', (roomInfo) => {
