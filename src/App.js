@@ -57,6 +57,7 @@ function App() {
 
       // When someone joins a room, they will request a current copy of the board. Send that room info to the server
     socket.on('uponJoiningload', () => {
+      setCurrentboard(currentBoard);
       sendBoard(currentBoard);
       console.log("The person is drawing")
     })
@@ -168,6 +169,7 @@ function App() {
               <button onClick={() => {
                   saveableCanvas.current.clear();
                   let saveData = saveableCanvas.current.getSaveData()
+                  setCurrentboard(saveData)
                   sendBoard(saveData)
                 }}>
                 Clear Board
