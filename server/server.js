@@ -48,7 +48,7 @@ io.on('connection', (socket) => {
             socket.join(joinRoomID);
             console.log("Room successfully joined");
             var iterator = rooms.get(joinRoomID).values();
-            var first = iterator.next().value();
+            var first = iterator.next().value;
             socket.to(first).emit('uponJoiningload', null);
             socket.emit('newRoomID', joinRoomID);
         }
