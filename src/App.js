@@ -31,7 +31,7 @@ function App() {
       if (!socket) {
         socket = io(ENDPOINT)
       }
-      console.log(socket.id)
+      //console.log(socket.id)
       socket.on('connection', () => {
       console.log("I'm in the mainframe.");
     })
@@ -43,11 +43,11 @@ function App() {
     // When the client receives the call to load the board, load the board in CanvasDraw
     socket.on('loadBoard', (saveData) => {
       // This should load the board (see canvas demo)
-      console.log(saveData)
+      //console.log(saveData)
       var updatedBoard = decompress(saveData);
       // var updatedBoard = saveData;
       // console.log(saveData)
-      console.log("Attempting to load board")
+      //console.log("Attempting to load board")
       saveableCanvas.current.loadSaveData(updatedBoard, true);
     })
 
@@ -60,7 +60,7 @@ function App() {
     socket.on('uponJoiningload', () => {
       setCurrentboard(currentBoard);
       sendBoard(currentBoard);
-      console.log("The person is drawing")
+      //console.log("The person is drawing")
     })
 
     socket.on('newRoomID', (roomID) => {
@@ -80,16 +80,16 @@ function App() {
     // Create room
   function createRoom(e) {
     e.preventDefault();
-    console.log("Create Room Button pressed");
+    //console.log("Create Room Button pressed");
     socket.emit('createRequest', null);
   }
 
     // When the client requests to join a room, send a "joinRequest" with the contents of roomID to the server
   function joinRoom(e) {
     e.preventDefault()
-    console.log("join room button pressed")
-    console.log(roomID);
-    console.log(socket);
+    //console.log("join room button pressed")
+    //console.log(roomID);
+    //console.log(socket);
     socket.emit('joinRequest', roomID);
   }
 
@@ -98,12 +98,12 @@ function App() {
     // Compress the board info
     var compressedData = compress(saveData);
     // var compressedData = saveData;
-    console.log(compressedData)
+    //console.log(compressedData)
     let roomInfo = {
       roomID: roomID,
       currentBoard: compressedData
     }
-    console.log("Sending data")
+    //console.log("Sending data")
     socket.emit('updateBoard', roomInfo);
   }
 
