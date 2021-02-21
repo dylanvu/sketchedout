@@ -1,6 +1,7 @@
 import './App.css';
 import CanvasDraw from "react-canvas-draw";
 import socketClient from 'socket.io-client';
+import React, { useState } from 'react'
 //import generateroomid from './generateroomID';
 
 // This should be the url of the server
@@ -16,7 +17,8 @@ function App() {
     roomID: "myRoomID",
     currentBoard: "myCurrentboard"
   }
-
+  let [currentBrushRadius, setCurrentBrushradius] = useState(12)
+  let [currentBrushColor, setCurrentBrushColor] = useState()
   socket.on('connection', () => {
     console.log("I'm in the mainframe.");
   })
@@ -57,41 +59,73 @@ function App() {
   }
 
   return (
+    
     <div class="area-1">
       <h1>SketchedOut</h1>
       <br>
       </br>
-            <div class="question">
-            <label>Enter the Room Code: </label>
+      <div className="flex-container">
+      <section className="flex1">
+            <div className="question">
+              <div className="roomID">
+              <label>
+                Current Room Code:
+              </label>
+              </div>
+              <br>
+              </br>
+              <div className="roomCode">
+              <label>
+              Enter the Room Code: 
+              </label>
+              </div>
             <input type="text" name="name">
             </input>
             <br>
             </br>
-            <input type="submit" name="submit" value="Join Room" onClick={joinRoom}>
-            </input>
+            <button className="joinRoom" onClick={joinRoom}> Join Room
+            </button>
             <label></label>
-            <button onClick={createRoom}>
-            Create a room
+            <button className="createRoom" onClick={createRoom}> Create Room
             </button>
             </div>
-              <br>
-              </br>
-              <button onClick={() => {
+      </section>
+      <div className="flex2">
+          <div className="canvasButtons">
+              <p className="currentBrushNumber">
+                <label>Current Brush Number: </label>{currentBrushRadius}
+              </p>
+              <button className="undo" onClick={() => {
               this.saveableCanvas.undo();
               }}>
               Undo
               </button>
-              <button>
-              Brush Size
+              <button className="increaseBrushRadius" onClick={() =>{
+                
+                setCurrentBrushradius(currentBrushRadius+1)
+                
+              }}>
+              Increase Brush Size
               </button>
-              <button>
+              <button className="decreaseBrushRadius" onClick={() => {
+                setCurrentBrushradius(currentBrushRadius-1)
+              }}>
+              Decrease Brush Size 
+              </button>
+              <button className="color">
               Color
               </button>
+          </div>
+      </div>
+    </div>
       <body1>
 
-            <CanvasDraw 
+      <CanvasDraw 
       canvasWidth= "1700px"
-      canvasHeight= "700px"/>
+      canvasHeight= "700px"
+      brushRadius= {currentBrushRadius}
+      
+      />
       </body1>
 
       </div>
