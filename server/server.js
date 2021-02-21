@@ -6,8 +6,9 @@ const http = require('http').createServer(app);
 // Since you are accessing the server from different ports, you have to go through CORS. See: https://socket.io/docs/v3/handling-cors/
 const io = require('socket.io')(http, {
     // Origin should be where the request is coming from
+    // http://localhost:3000/
     cors: {
-        origin: "http://localhost:3000",
+        origin: "http://localhost:3000/",
         methods: ["GET", "POST"]
     }
 });
@@ -20,7 +21,7 @@ let roomIDlist = [];
 io.on('connection', (socket) => {
     console.log("A user has connected! Their socket ID is: " + socket.id);
 
-    socket.emit('connection', null)
+    socket.emit('connection', "Hello There")
 
     // socket.on('boardDebug', () => {
     //     console.log('Received message from canvas for socket ' + socket.id)
@@ -34,51 +35,49 @@ io.on('connection', (socket) => {
     socket.on('createRequest', () => {
         var roomID = generateroomid(6)
         console.log("Socket " + socket.id + " created room " + roomID)
-        roomID = "FLXJYZ" // for debugging create room
         roomIDlist.push(roomID);
+        socket.emit('newRoomID', roomID); // There is an issue here where when you emit this message back, the existing client makes a new socket. It's usable, but not perfect.
         socket.join(roomID);
-        socket.emit('newRoomID', roomID); // We don't have to emit a new board back
     })
     
     // Function to join a room upon join request
     socket.on('joinRequest', (joinRoomID) => {
-        console.log(joinRoomID)
-        
-        // Check to see if the room exists
-        var roomCheck = false;
-        for (room = 0; room < roomIDlist.length; room++) {
-            if (joinRoomID == roomIDlist[room]) {
-                roomCheck = true
-                break
-            }
+        // Check to see if the joinroomID exists inside rooms (ES6 map)
+        var rooms = io.sockets.adapter.rooms;
+        if (rooms.has(joinRoomID) == true) {
+            var iterator = rooms.get(joinRoomID).values();
+            var first = iterator.next().value;
+            console.log("The person joining the room is: " + socket.id)
+            console.log("The person already in the room is: " + first);
+            socket.join(joinRoomID);
+            socket.to(first).emit('uponJoiningload', null);
+            socket.emit('newRoomID', joinRoomID);
         }
         // If the room does not exist, send an error message to the client
-        if (roomCheck == false) {
+        else {
             socket.emit('joinError', null)
-        } else if (roomCheck == true) {    // If the room does exist, join the room and send the board
-            socket.join(joinRoomID);
-
+            console.log("Room requested not found")
             // I wonder if there's an issue with this below. Maybe we should only send to a host or something?
-            socket.to(joinRoomID).emit('uponJoiningload', null) // TODO: change this to "sendBoard" or something 
-            // You don't need to call a socket.on to update the board here because when you emit the 'uponJoiningload', on the client side it should trigger a room-wide update function
+            // TODO: change this to "sendBoard" or something // You don't need to call a socket.on to update the board here because when you emit the 'uponJoiningload', on the client side it should trigger a room-wide update function
             // which will encompass this newly joined socket anyways.
-        }
-    })
+    }})
 
     socket.on('updateBoard', (roomInfo) => {
+        console.log(socket.id + " has drawn on the board!")
+        console.log(roomInfo.currentBoard)
         socket.to(roomInfo.roomID).emit('loadBoard', roomInfo.currentBoard)
         }
     )
 
-    socket.on('disconnect', (roomID) => {
-        var room = socket.adapter.rooms[roomID];
-        const index = roomIDlist.indexOf(roomID)
-        if (room.length = 0) {
-            if (index > -1) {
-                roomIDlist.splice(index, 1)
-            }
-        }
+    socket.on('disconnect', () => {
+        var roomList = io.sockets.adapter.rooms
+        console.log(roomList)
+        console.log(typeof roomList)
         console.log('Socket ' + socket.id + ' disconnected'); 
+    })
+
+    socket.on('debugMessage', () => {
+        console.log("Debug message triggered")
     })
 });
 

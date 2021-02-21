@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^12.7.1",
     "cors": "^2.8.5",
     "firebase": "^8.2.9",
+    "heroku": "^7.47.13",
     "lz-string": "^1.4.4",
     "mongoose": "^5.11.17",
     "package.json": "^2.0.1",
@@ -25,7 +26,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "cd server && npm install && node server"
   },
   "eslintConfig": {
     "extends": [

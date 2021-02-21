@@ -6,26 +6,23 @@ import { compress, decompress } from 'lz-string'
 import { ChromePicker } from 'react-color'
 //import generateroomid from './generateroomID';
 
+// socket MUST be defined outside here as upon calling a useState, it creates a new client.
+let socket = null
+
 function App() {
   // This should be the url of the server
   const ENDPOINT = "http://localhost:2000"
   const saveableCanvas = useRef()
-  const[roomID, setroomID] = useState('No room')
 
     // This is to initialize socket
-  let socket = null
-
-  let roomInfo = {
-    roomID: "Room not joined",
-    currentBoard: "No board yet"
-  }
 
   // Issue: when we increase the brush size on a client, it emits null and the client crashes.
   // 
 
   let [currentBrushRadius, setCurrentBrushradius] = useState(12)
-
-  const [currentBrushColor, setCurrentbrushColor] = useState("#17202A")
+  let [currentBrushColor, setCurrentbrushColor] = useState("#17202A")
+  let [roomID, setroomID] = useState('No room')
+  let [currentBoard, setCurrentboard] = useState('No board yet')
 
   useEffect(() => {
     // All the socket events should be in the useEffect to prevent duplicate receiving of events from server? According to the mentor
@@ -34,7 +31,7 @@ function App() {
       if (!socket) {
         socket = io(ENDPOINT)
       }
-
+      console.log(socket.id)
       socket.on('connection', () => {
       console.log("I'm in the mainframe.");
     })
@@ -46,7 +43,10 @@ function App() {
     // When the client receives the call to load the board, load the board in CanvasDraw
     socket.on('loadBoard', (saveData) => {
       // This should load the board (see canvas demo)
+      console.log(saveData)
       var updatedBoard = decompress(saveData);
+      // var updatedBoard = saveData;
+      // console.log(saveData)
       console.log("Attempting to load board")
       saveableCanvas.current.loadSaveData(updatedBoard, true);
     })
@@ -58,25 +58,38 @@ function App() {
 
       // When someone joins a room, they will request a current copy of the board. Send that room info to the server
     socket.on('uponJoiningload', () => {
-      sendBoard(roomInfo.currentBoard);
+      setCurrentboard(currentBoard);
+      sendBoard(currentBoard);
+      console.log("The person is drawing")
     })
 
     socket.on('newRoomID', (roomID) => {
-      roomInfo.roomID = roomID
+      setroomID(roomID)
+    })
+    socket.on('disconnect', () => {
+      socket.emit('debugMessage')
     })
 
-  },[])
+    socket.on('debugMessage', (message) => {
+      console.log(message)
+    })
+
+  })
 
 
     // Create room
-  function createRoom() {
-    console.log("Create Room Button pressed")
+  function createRoom(e) {
+    e.preventDefault();
+    console.log("Create Room Button pressed");
     socket.emit('createRequest', null);
   }
 
     // When the client requests to join a room, send a "joinRequest" with the contents of roomID to the server
-  function joinRoom(event, roomID) {
-    console.log("Join Room Button pressed");
+  function joinRoom(e) {
+    e.preventDefault()
+    console.log("join room button pressed")
+    console.log(roomID);
+    console.log(socket);
     socket.emit('joinRequest', roomID);
   }
 
@@ -84,13 +97,17 @@ function App() {
   function sendBoard(saveData) {
     // Compress the board info
     var compressedData = compress(saveData);
-    roomInfo.currentBoard = compressedData;
+    // var compressedData = saveData;
+    console.log(compressedData)
+    let roomInfo = {
+      roomID: roomID,
+      currentBoard: compressedData
+    }
     console.log("Sending data")
     socket.emit('updateBoard', roomInfo);
   }
 
   return (
-    
     <div className="area-1">
       <h1>SketchedOut</h1>
       <br>
@@ -100,7 +117,7 @@ function App() {
             <div className="question">
               <div className="roomID">
               <label>
-                Current Room Code:
+                Current Room Code: {roomID}
               </label>
               </div>
               <br>
@@ -114,10 +131,10 @@ function App() {
             </input>
             <br>
             </br>
-            <button className="joinRoom" onClick={(e) => {joinRoom(e, roomID)}}> Join Room
+            <button className="joinRoom" onClick={(e) => {joinRoom(e)}}> Join Room
             </button>
             <label></label>
-            <button className="createRoom" onClick={createRoom}> Create Room
+            <button className="createRoom" onClick={(e) => {createRoom(e)}}> Create Room
             </button>
             </div>
       </section>
@@ -139,13 +156,16 @@ function App() {
               Increase Brush Size
               </button>
               <button className="decreaseBrushRadius" onClick={() => {
-                setCurrentBrushradius(currentBrushRadius-1)
+                if (currentBrushRadius > 0) {
+                  setCurrentBrushradius(currentBrushRadius-1)
+                }
               }}>
               Decrease Brush Size 
               </button>
               <button className="clearBoard" onClick={() => {
                   saveableCanvas.current.clear();
                   let saveData = saveableCanvas.current.getSaveData()
+                  setCurrentboard(saveData)
                   sendBoard(saveData)
                 }}>
                 Clear Board
