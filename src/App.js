@@ -28,19 +28,11 @@ socket.on('boardResponse', () => {
   console.log("Obtained board info back")
 })
 
-function debugBoard(saveData) {
-  console.log('Canvas was mouse-upped');
-  socket.emit('boardDebug', null);
-  console.log(saveData);
-  var compressedData = compress(saveData);
-  console.log(compressedData);
-}
-
-  // When the client receives the call to load the board, load the board in CanvasDraw
+// When the client receives the call to load the board, load the board in CanvasDraw
 socket.on('loadBoard', (saveData) => {
   // This should load the board (see canvas demo)
   var updatedBoard = decompress(saveData);
-  console.log(updatedBoard)
+  console.log(updatedBoard);
 })
 
   // If the roomID does not exist
@@ -79,6 +71,7 @@ function sendBoard(saveData) {
 }
 
 class App extends Component {
+  
   render() {
     return (
       <div class="area-1">
@@ -133,7 +126,4 @@ class App extends Component {
     )}
 }
 
-
-
 export default App;
-
