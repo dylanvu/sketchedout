@@ -8,11 +8,12 @@ html {background-image:url(images/bluelight.jpg)}
     font-size:50px;
     text-align:center;
     border: 3px solid white;
+    width:80%;
     padding-bottom: 10px;
     padding-top: 10px;
     margin-top:20px;
-    margin-right:300px;
-    margin-left:300px;
+    margin-right:auto;
+    margin-left:auto;
     /*background-image:url('images/bluelight.jpg');*/
 }
 
@@ -105,4 +106,15 @@ font-style:bold;
     }
     .flex1{
         flex: 0 1 300px;
+    }
+
+.area-1 .clearBoard{
+    padding: 8px 15px;
+    font-family: Courier;
+    background-color: grey;
+    color: white;
+    }
+    .area-1 .clearBoard:hover{
+    background-color:orange;
+    color:white;
     }

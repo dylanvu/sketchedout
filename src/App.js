@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from "react";
 import CanvasDraw from "react-canvas-draw";
 import { io } from 'socket.io-client';
 import { compress, decompress } from 'lz-string'
+import { CirclePicker } from 'react-color';
+
 //import generateroomid from './generateroomID';
 
 function App() {
@@ -24,6 +26,8 @@ function App() {
 
   let [currentBrushRadius, setCurrentBrushradius] = useState(12)
   let [currentBrushColor, setCurrentBrushColor] = useState()
+
+const [color, setColor] = useState(#fff)
 
   useEffect(() => {
     // All the socket events should be in the useEffect to prevent duplicate receiving of events from server? According to the mentor
@@ -89,7 +93,7 @@ function App() {
 
   return (
     
-    <div class="area-1">
+    <div className="area-1">
       <h1>SketchedOut</h1>
       <br>
       </br>
@@ -143,10 +147,12 @@ function App() {
               }}>
               Decrease Brush Size 
               </button>
-              <button className="color">
+              <button className="color" onClick={() => setColor(updatedColor){
+                
+              }}>
               Color
               </button>
-              <button onClick={() => {
+              <button className="clearBoard" onClick={() => {
                   saveableCanvas.current.clear();
                   let saveData = saveableCanvas.current.getSaveData()
                   sendBoard(saveData)
