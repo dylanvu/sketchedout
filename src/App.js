@@ -3,8 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import CanvasDraw from "react-canvas-draw";
 import { io } from 'socket.io-client';
 import { compress, decompress } from 'lz-string'
-import { CirclePicker } from 'react-color';
-
+import { ChromePicker } from 'react-color'
 //import generateroomid from './generateroomID';
 
 function App() {
@@ -25,9 +24,8 @@ function App() {
   // 
 
   let [currentBrushRadius, setCurrentBrushradius] = useState(12)
-  let [currentBrushColor, setCurrentBrushColor] = useState()
 
-const [color, setColor] = useState(#fff)
+  const [currentBrushColor, setCurrentbrushColor] = useState("#17202A")
 
   useEffect(() => {
     // All the socket events should be in the useEffect to prevent duplicate receiving of events from server? According to the mentor
@@ -136,9 +134,7 @@ const [color, setColor] = useState(#fff)
                 Undo
                 </button>
               <button className="increaseBrushRadius" onClick={() =>{
-                
                 setCurrentBrushradius(currentBrushRadius+1)
-                
               }}>
               Increase Brush Size
               </button>
@@ -147,11 +143,6 @@ const [color, setColor] = useState(#fff)
               }}>
               Decrease Brush Size 
               </button>
-              <button className="color" onClick={() => setColor(updatedColor){
-                
-              }}>
-              Color
-              </button>
               <button className="clearBoard" onClick={() => {
                   saveableCanvas.current.clear();
                   let saveData = saveableCanvas.current.getSaveData()
@@ -159,11 +150,39 @@ const [color, setColor] = useState(#fff)
                 }}>
                 Clear Board
               </button>
+              <button className="colorRed" onClick={() => {
+              setCurrentbrushColor("#ff0000")
+              }}>
+              Red
+              </button>
+              <button className="colorOrange" onClick={() => {
+              setCurrentbrushColor("#ff7b00")
+              }}>
+              Orange
+              </button>
+              <button className="colorYellow" onClick={() => {
+              setCurrentbrushColor("#FFFF00")
+              }}>
+              Yellow
+              </button>
+              <button className="colorGreen" onClick={() => {
+              setCurrentbrushColor("#008000")
+              }}>
+              Green
+              </button>
+              <button className="colorBlue" onClick={() => {
+              setCurrentbrushColor("#0000FF")
+              }}>
+              Blue
+              </button>
+              <button className="colorPurple" onClick={() => {
+              setCurrentbrushColor("#800080")
+              }}>
+              Purple
+              </button>
           </div>
       </div>
     </div>
-      <body1>
-
       <div onMouseUp={() => {
           let saveData = saveableCanvas.current.getSaveData()
           sendBoard(saveData)
@@ -173,11 +192,10 @@ const [color, setColor] = useState(#fff)
           canvasWidth= "1700px"
           canvasHeight= "700px"
           brushRadius= {currentBrushRadius}
+          brushColor= {currentBrushColor}
           />
         </div>
-      </body1>
       </div>
-
   );
   }
 export default App;
