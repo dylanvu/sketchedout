@@ -20,7 +20,7 @@ function App() {
   // 
 
   let [currentBrushRadius, setCurrentBrushradius] = useState(12)
-  let [currentBrushColor, setCurrentbrushColor] = useState("#17202A")
+  let [currentBrushColor, setCurrentbrushColor] = useState("#000000")
   let [roomID, setroomID] = useState('No room')
   let [currentBoard, setCurrentboard] = useState('No board yet')
 
@@ -199,6 +199,11 @@ function App() {
               setCurrentbrushColor("#800080")
               }}>
               Purple
+              </button>
+              <button className="colorBlack" onClick={() => {
+              setCurrentbrushColor("#000000")
+              }}>
+              Black
               </button>
           </div>
       </div>

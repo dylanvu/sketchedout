@@ -46,6 +46,10 @@ margin:0px;
         background-color:blue;
         color:white;
     }
+.area-1 .canvasButtons{
+    width:80%;
+    }
+
 
 .area-1 .undo{
     padding: 8px 15px;
@@ -85,7 +89,6 @@ font-style:bold;
 }
 
 .area-1 .clearBoard{
-    margin-right:70px;
     padding: 8px 15px;
     font-family: Courier;
     background-color: grey;
@@ -151,7 +154,6 @@ font-style:bold;
     }
 
 .area-1 .colorPurple{
-    margin-right:100px;
     padding:5px 10px;
     font-family:Courier;
     background-color:orchid;
@@ -162,13 +164,13 @@ font-style:bold;
     color:white;
     }
 
-    .area-1 .colorDefault{
+.area-1 .colorBlack{
         padding:5px 10px;
         font-family:Courier;
-        background-color:white;
+        background-color:lightgray;
         color: black;
         }
-        .area-1 .colorDefault:hover{
+        .area-1 .colorBlack:hover{
         background-color:black;
         color:white;
         }
