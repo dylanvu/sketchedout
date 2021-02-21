@@ -8,14 +8,11 @@ import { compress, decompress } from 'lz-string'
 function App() {
   // This should be the url of the server
   const ENDPOINT = "http://localhost:2000"
-  
   const saveableCanvas = useRef()
+  const[roomID, setroomID] = useState('No room')
 
     // This is to initialize socket
   let socket = null
-
-    // Client information
-  let roomIDtoJoin = "JoinROOM" // This is a template value. Later on, use a form to change this input
 
   let roomInfo = {
     roomID: "Room not joined",
@@ -76,9 +73,9 @@ function App() {
   }
 
     // When the client requests to join a room, send a "joinRequest" with the contents of roomID to the server
-  function joinRoom() {
+  function joinRoom(event, roomID) {
     console.log("Join Room Button pressed");
-    socket.emit('joinRequest', roomIDtoJoin);
+    socket.emit('joinRequest', roomID);
   }
 
   // This function should save the current board
@@ -111,11 +108,11 @@ function App() {
               Enter the Room Code: 
               </label>
               </div>
-            <input type="text" name="name">
+            <input type="text" name="name" onChange={event => setroomID(event.target.value)}>
             </input>
             <br>
             </br>
-            <button className="joinRoom" onClick={joinRoom}> Join Room
+            <button className="joinRoom" onClick={(e) => {joinRoom(e, roomID)}}> Join Room
             </button>
             <label></label>
             <button className="createRoom" onClick={createRoom}> Create Room
