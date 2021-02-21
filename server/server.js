@@ -8,12 +8,13 @@ const io = require('socket.io')(http, {
     // Origin should be where the request is coming from
     // http://localhost:3000/
     cors: {
-        origin: "http://localhost:3000/",
+        origin: "http://localhost:3000",
         methods: ["GET", "POST"]
     }
 });
 
 const PORT = 2000;
+//const PORT = process.env.PORT || 2000;
 http.listen(PORT, () => console.log('The server is running'));
 
 let roomIDlist = [];
@@ -34,7 +35,7 @@ io.on('connection', (socket) => {
     // Function to create a room upon create request
     socket.on('createRequest', () => {
         var roomID = generateroomid(6)
-        console.log("Socket " + socket.id + " created room " + roomID)
+        //console.log("Socket " + socket.id + " created room " + roomID)
         roomIDlist.push(roomID);
         socket.emit('newRoomID', roomID); // There is an issue here where when you emit this message back, the existing client makes a new socket. It's usable, but not perfect.
         socket.join(roomID);
@@ -64,15 +65,15 @@ io.on('connection', (socket) => {
 
     socket.on('updateBoard', (roomInfo) => {
         console.log(socket.id + " has drawn on the board!")
-        console.log(roomInfo.currentBoard)
+        //console.log(roomInfo.currentBoard)
         socket.to(roomInfo.roomID).emit('loadBoard', roomInfo.currentBoard)
         }
     )
 
     socket.on('disconnect', () => {
         var roomList = io.sockets.adapter.rooms
-        console.log(roomList)
-        console.log(typeof roomList)
+        //console.log(roomList)
+        //console.log(typeof roomList)
         console.log('Socket ' + socket.id + ' disconnected'); 
     })
 
