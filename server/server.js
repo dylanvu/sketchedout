@@ -20,7 +20,7 @@ let roomIDlist = [];
 io.on('connection', (socket) => {
     console.log("A user has connected! Their socket ID is: " + socket.id);
 
-    socket.emit('connection', null)
+    socket.emit('connection', "Hello There")
 
     // socket.on('boardDebug', () => {
     //     console.log('Received message from canvas for socket ' + socket.id)
@@ -34,10 +34,9 @@ io.on('connection', (socket) => {
     socket.on('createRequest', () => {
         var roomID = generateroomid(6)
         console.log("Socket " + socket.id + " created room " + roomID)
-        roomID = "FLXJYZ" // for debugging create room
         roomIDlist.push(roomID);
+        socket.emit('newRoomID', roomID); // There is an issue here where when you emit this message back, the existing client makes a new socket. It's usable, but not perfect.
         socket.join(roomID);
-        socket.emit('newRoomID', roomID); // We don't have to emit a new board back
     })
     
     // Function to join a room upon join request
@@ -61,6 +60,7 @@ io.on('connection', (socket) => {
     }})
 
     socket.on('updateBoard', (roomInfo) => {
+        console.log(socket.id + " has drawn on the board!")
         socket.to(roomInfo.roomID).emit('loadBoard', roomInfo.currentBoard)
         }
     )
