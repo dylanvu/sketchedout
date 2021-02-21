@@ -63,6 +63,7 @@ io.on('connection', (socket) => {
             console.log("Room successfully joined")
             // I wonder if there's an issue with this below. Maybe we should only send to a host or something?
             socket.to(joinRoomID).emit('uponJoiningload', null) // TODO: change this to "sendBoard" or something 
+            socket.emit('newRoomID', joinRoomID)
             // You don't need to call a socket.on to update the board here because when you emit the 'uponJoiningload', on the client side it should trigger a room-wide update function
             // which will encompass this newly joined socket anyways.
         }
