@@ -9,7 +9,6 @@ function App() {
   // This should be the url of the server
   const ENDPOINT = "http://localhost:2000"
   const saveableCanvas = useRef()
-  const[roomID, setroomID] = useState('No room')
 
     // This is to initialize socket
   let socket = null
@@ -24,6 +23,7 @@ function App() {
 
   let [currentBrushRadius, setCurrentBrushradius] = useState(12)
   let [currentBrushColor, setCurrentBrushColor] = useState()
+  let [roomID, setroomID] = useState('No room')
 
   useEffect(() => {
     // All the socket events should be in the useEffect to prevent duplicate receiving of events from server? According to the mentor
@@ -62,6 +62,9 @@ function App() {
     socket.on('newRoomID', (roomID) => {
       roomInfo.roomID = roomID
     })
+    socket.on('disconnect', () => {
+      socket.emit('debugMessage')
+    })
 
   },[])
 
@@ -74,7 +77,9 @@ function App() {
 
     // When the client requests to join a room, send a "joinRequest" with the contents of roomID to the server
   function joinRoom(event, roomID) {
-    console.log("Join Room Button pressed");
+    console.log("join room button pressed")
+    console.log(roomID);
+    console.log(socket);
     socket.emit('joinRequest', roomID);
   }
 
@@ -88,7 +93,6 @@ function App() {
   }
 
   return (
-    
     <div class="area-1">
       <h1>SketchedOut</h1>
       <br>
@@ -112,6 +116,7 @@ function App() {
             </input>
             <br>
             </br>
+            <p>{roomID}</p>
             <button className="joinRoom" onClick={(e) => {joinRoom(e, roomID)}}> Join Room
             </button>
             <label></label>

@@ -46,6 +46,8 @@ io.on('connection', (socket) => {
         
         // Check to see if the room exists
         var roomCheck = false;
+        // Must modify the roomcheck algorithim here to iterate through every single room obtained from io.sockets.adapter.rooms
+        // And check to see if joinRoomID is inside of this list thingy object
         for (room = 0; room < roomIDlist.length; room++) {
             if (joinRoomID == roomIDlist[room]) {
                 roomCheck = true
@@ -70,15 +72,22 @@ io.on('connection', (socket) => {
         }
     )
 
-    socket.on('disconnect', (roomID) => {
-        var room = socket.adapter.rooms[roomID];
-        const index = roomIDlist.indexOf(roomID)
-        if (room.length = 0) {
-            if (index > -1) {
-                roomIDlist.splice(index, 1)
-            }
-        }
+    socket.on('disconnect', () => {
+        // var room = socket.adapter.rooms[roomID];
+        // const index = roomIDlist.indexOf(roomID)
+        // if (room.length == 0) {
+        //     if (index > -1) {
+        //         roomIDlist.splice(index, 1)
+        //     }
+        // }
+        var roomList = io.sockets.adapter.rooms
+        console.log(roomList)
+        console.log(typeof roomList)
         console.log('Socket ' + socket.id + ' disconnected'); 
+    })
+
+    socket.on('debugMessage', () => {
+        console.log("Debug message triggered")
     })
 });
 
