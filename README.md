@@ -9,4 +9,4 @@ The backend server code in this respository is not in use on Heroku and is not u
 ## Known Issues
 * When a user joins a room that already has a drawing on it, they will not be able to receive the current whiteboard. We are working on debugging this issue.
 * It takes a while to launch the website if no one is using it. This is because Heroku has to launch the backend server.
-* If too many users draw at once, the app dramatically slows down.
+* If users draw at once, the app dramatically slows down and some strokes are not saved sometimes.
